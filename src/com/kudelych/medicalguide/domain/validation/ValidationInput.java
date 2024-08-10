@@ -1,12 +1,16 @@
-package com.sashka11111.bookkeeping.domain.validation;
+package com.kudelych.medicalguide.domain.validation;
 
+import com.kudelych.medicalguide.domain.model.Category;
+import com.kudelych.medicalguide.domain.model.User;
+import java.util.List;
 import java.util.Scanner;
 
-/**
- * Утилітний клас для валідації та обробки вводу користувача.
- */
 public class ValidationInput {
 
+  // Метод для перевірки, чи є рядок порожнім або містить лише пробіли
+  public static boolean isEmpty(String input) {
+    return input == null || input.trim().isEmpty();
+  }
   /**
    * Запитує у користувача правильне числове значення типу int.
    *
@@ -25,16 +29,44 @@ public class ValidationInput {
     }
     return input;
   }
-  public static String getValidPhoneInput(Scanner scanner) {
-    String input;
-    while (true) {
-      input = scanner.nextLine().trim();
-      if (input.matches("^\\+[0-9]+$")) {
-        break; // Правильний ввід, виходимо з циклу
-      } else {
-        System.out.println("Неправильний формат номеру телефону. Почніть номер з + та введіть цифри без пробілів.");
-      }
-    }
-    return input;
+
+  // Метод для перевірки правильності введення ID (позитивне число)
+  public static boolean isValidId(int id) {
+    return id > 0;
+  }
+
+  // Метод для перевірки правильності введення ціни (позитивне число)
+  public static boolean isValidPrice(double price) {
+    return price > 0;
+  }
+
+  // Метод для перевірки правильності оцінки (від 1 до 5)
+  public static boolean isValidMark(int mark) {
+    return mark >= 1 && mark <= 5;
+  }
+
+  // Метод для перевірки правильності електронної пошти
+  public static boolean isValidEmail(String email) {
+    return email != null && email.matches("^[A-Za-z0-9+_.-]+@(.+)$");
+  }
+
+  // Метод для перевірки довжини паролю (мінімум 6 символів)
+  public static boolean isValidPassword(String password) {
+    return password != null && password.length() >= 6;
+  }
+
+  // Метод для перевірки правильності введення імені (не порожній рядок та містить хоча б одну букву)
+  public static boolean isValidName(String name) {
+    return !isEmpty(name) && name.matches(".*[a-zA-Zа-яА-Я].*");
+  }
+
+  // Метод для перевірки унікальності логіна
+  public static boolean isLoginUnique(List<User> users, String login) {
+    return users.stream().noneMatch(user -> user.getUsername().equals(login));
+  }
+
+  public static boolean isCategoryNameUnique(List<Category> categories, String name) {
+    return categories.stream()
+        .noneMatch(category -> category.getName().equalsIgnoreCase(name));
   }
 }

@@ -1,8 +1,11 @@
-package com.sashka11111.bookkeeping.service;
+package com.kudelych.medicalguide.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.sashka11111.bookkeeping.domain.model.Category;
+import com.kudelych.medicalguide.domain.model.Category;
+import com.kudelych.medicalguide.domain.validation.ValidationInput;
+import com.kudelych.medicalguide.service.util.JsonDataReader;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -13,8 +16,12 @@ public class CategoryService {
   private static final String CATEGORIES_FILE_PATH = "Data/categories.json";
   private static List<Category> categories;
 
-  public static void main(String[] args) {
+  static {
+    // Ініціалізація списку категорій при запуску програми
     categories = JsonDataReader.modelDataJsonReader(CATEGORIES_FILE_PATH, Category[].class);
+  }
+
+  public static void main(String[] args) {
     displayCategories(categories);
   }
 
@@ -24,7 +31,6 @@ public class CategoryService {
     } else {
       System.out.println("Список категорій:");
       for (Category category : categories) {
-        System.out.println("ID категорії: " + category.getCategoryId());
         System.out.println("Назва: " + category.getName());
         System.out.println(); // Для розділення між записами
       }
@@ -33,7 +39,6 @@ public class CategoryService {
 
   public static void addCategory() {
     Scanner scanner = new Scanner(System.in);
-    categories = JsonDataReader.modelDataJsonReader(CATEGORIES_FILE_PATH, Category[].class);
 
     // Знайти максимальний ID категорії
     int maxCategoryId = categories.stream()
@@ -47,8 +52,20 @@ public class CategoryService {
     // Запитати користувача про дані нової категорії
     System.out.println("Додавання нової категорії");
 
-    System.out.println("Введіть назву категорії:");
-    String name = scanner.nextLine();
+    String name;
+    while (true) {
+      System.out.print("Введіть назву категорії: ");
+      name = scanner.nextLine();
+
+      // Валідація назви категорії
+      if (!ValidationInput.isValidName(name)) {
+        System.out.println("Категорія повинна містити буквенний символ.");
+      } else if (!ValidationInput.isCategoryNameUnique(categories, name)) {
+        System.out.println("Категорія з такою назвою вже існує.");
+      } else {
+        break;  // Якщо всі умови виконані, виходимо з циклу
+      }
+    }
 
     // Створюємо новий об'єкт категорії
     Category newCategory = new Category();

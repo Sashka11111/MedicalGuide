@@ -1,28 +1,48 @@
-package com.sashka11111.bookkeeping.domain.model;
+package com.kudelych.medicalguide.domain.model;
 
 public class Review {
 
   private int id;
-  private String comment;
+  private String medicine;
+  private String user;
   private int mark;
-  private int book;
+  private String comment;
 
-  public Review() {
-  }
-  public Review(int id, String comment, int mark,int book) {
+  // Конструктор
+  public Review(int id, String medicine, String user, int mark, String comment) {
     this.id = id;
-    this.comment = comment;
+    this.medicine = medicine;
+    this.user = user;
     this.mark = mark;
-    this.book = book;
-  }
-
-
-  public String getComment() {
-    return comment;
-  }
-
-  public void setComment(String comment) {
     this.comment = comment;
+  }
+
+  // Пустий конструктор
+  public Review() {}
+
+  // Гетери і сетери
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public String getMedicine() {
+    return medicine;
+  }
+
+  public void setMedicine(String medicine) {
+    this.medicine = medicine;
+  }
+
+  public String getUser() {
+    return user;
+  }
+
+  public void setUser(String user) {
+    this.user = user;
   }
 
   public int getMark() {
@@ -32,28 +52,24 @@ public class Review {
   public void setMark(int mark) {
     this.mark = mark;
   }
-  public int getId() {
-    return id;
+
+  public String getComment() {
+    return comment;
   }
 
-  public void setId(int id) {
-    this.id = id;
+  public void setComment(String comment) {
+    this.comment = comment;
   }
 
-  public int getbook() {
-    return book;
-  }
-
-  public void setbook(int book) {
-    this.book = book;
-  }
+  // Перевизначення методу toString
   @Override
   public String toString() {
     return "Review{" +
-        "id=" + id + '\'' +
-        "comment='" + comment + '\'' +
+        "id=" + id +
+        ", medicine=" + medicine +
+        ", user=" + user +
         ", mark=" + mark +
-        ", book=" + book +
+        ", comment='" + comment + '\'' +
         '}';
   }
 }

@@ -1,9 +1,14 @@
-package com.sashka11111.bookkeeping.service;
+package com.kudelych.medicalguide.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.sashka11111.bookkeeping.domain.model.Review;
-import com.sashka11111.bookkeeping.domain.validation.ValidationInput;
+import com.kudelych.medicalguide.domain.model.Review;
+import com.kudelych.medicalguide.domain.model.User;
+import com.kudelych.medicalguide.domain.model.Medicine;
+import com.kudelych.medicalguide.domain.validation.ValidationInput;
+import com.kudelych.medicalguide.presentation.Application;
+import com.kudelych.medicalguide.service.util.JsonDataReader;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -12,10 +17,16 @@ import java.util.Scanner;
 public class ReviewService {
 
   private static final String REVIEWS_FILE_PATH = "Data/reviews.json";
+  private static final String MEDICINES_FILE_PATH = "Data/medicines.json";
+  private static final String USERS_FILE_PATH = "Data/users.json";
   private static List<Review> reviews;
+  private static List<Medicine> medicines;
+  private static List<User> users;
 
   public static void main(String[] args) {
     reviews = JsonDataReader.modelDataJsonReader(REVIEWS_FILE_PATH, Review[].class);
+    medicines = JsonDataReader.modelDataJsonReader(MEDICINES_FILE_PATH, Medicine[].class);
+    users = JsonDataReader.modelDataJsonReader(USERS_FILE_PATH, User[].class);
     displayReviews(reviews);
   }
 
@@ -25,10 +36,10 @@ public class ReviewService {
     } else {
       System.out.println("Список відгуків:");
       for (Review review : reviews) {
-        System.out.println("Id відгука: " + review.getId());
-        System.out.println("Книга: " + review.getbook());
-        System.out.println("Коментар: " + review.getComment());
+        System.out.println("Лікарський засіб: " + review.getMedicine());
+        System.out.println("Користувач: " + review.getUser());
         System.out.println("Оцінка: " + review.getMark());
+        System.out.println("Коментар: " + review.getComment());
         System.out.println(); // Для розділення між записами
       }
     }
@@ -37,26 +48,52 @@ public class ReviewService {
   public static void addReview() {
     Scanner scanner = new Scanner(System.in);
     reviews = JsonDataReader.modelDataJsonReader(REVIEWS_FILE_PATH, Review[].class);
-    // Запитати користувача про дані нового відгуку
+    medicines = JsonDataReader.modelDataJsonReader(MEDICINES_FILE_PATH, Medicine[].class);
+    users = JsonDataReader.modelDataJsonReader(USERS_FILE_PATH, User[].class);
+
     System.out.println("Додавання нового відгуку:");
 
-    System.out.println("Введіть ID книги:");
-    int bookId = ValidationInput.getValidIntInput(scanner);
+    // Введення даних нового відгуку
+    System.out.print("Введіть назву лікарського засобу: ");
+    String medicineName = scanner.nextLine();
+    Medicine selectedMedicine = findMedicineByName(medicineName);
+    if (selectedMedicine == null) {
+      System.out.println("Лікарський засіб не знайдено.");
+      return;
+    }
 
-    System.out.println("Введіть оцінку (від 1 до 5):");
-    int mark = ValidationInput.getValidIntInput(scanner);
+    User currentUser = Application.currentUser; // Використання поточного користувача
+    if (currentUser == null) {
+      System.out.println("Вам потрібно авторизуватися.");
+      return;
+    }
 
-    System.out.println("Введіть коментар:");
+    int mark;
+    while (true) {
+      System.out.print("Введіть оцінку (1-5): ");
+      if (scanner.hasNextInt()) {
+        mark = scanner.nextInt();
+        scanner.nextLine(); // Скидання нового рядка після числового вводу
+        if (ValidationInput.isValidMark(mark)) {
+          break;  // Вихід з циклу, якщо оцінка валідна
+        } else {
+          System.out.println("Невірна оцінка. Введіть значення від 1 до 5.");
+        }
+      } else {
+        System.out.println("Будь ласка, введіть ціле число.");
+        scanner.nextLine(); // Очищення буфера сканера
+      }
+    }
+
+    System.out.print("Введіть коментар: ");
     String comment = scanner.nextLine();
 
-    Review newReview = new Review(); // Створюємо новий об'єкт відгуку
-
-    // Встановлюємо властивості відгуку
-    int newReviewId = generateUniqueId();
-    newReview.setId(newReviewId);
-    newReview.setbook(bookId); // ID книги
-    newReview.setMark(mark); // Оцінка
-    newReview.setComment(comment); // Коментар
+    Review newReview = new Review();
+    newReview.setId(generateUniqueId());
+    newReview.setMedicine(selectedMedicine.getName());
+    newReview.setUser(currentUser.getUsername());
+    newReview.setMark(mark);
+    newReview.setComment(comment);
 
     reviews.add(newReview);
 
@@ -71,19 +108,31 @@ public class ReviewService {
     }
   }
 
-  // Логіка для генерації унікального ідентифікатора для нового відгуку, що починається з 1 і збільшується на 1 з кожним новим відгуком
   private static int generateUniqueId() {
-    // Ініціалізуємо локальну змінну, що буде зберігати наступне значення унікального ідентифікатора
     int nextId = 1;
-
-    // Шукаємо максимальний ідентифікатор серед існуючих відгуків
     for (Review review : reviews) {
-      // Якщо ідентифікатор поточного відгуку більший за поточне значення nextId, оновлюємо nextId
       if (review.getId() >= nextId) {
-        nextId = review.getId() + 1; // Збільшуємо на 1
+        nextId = review.getId() + 1;
       }
     }
+    return nextId;
+  }
 
-    return nextId; // Повертаємо наступне унікальне значення ідентифікатора
+  private static Medicine findMedicineByName(String name) {
+    for (Medicine medicine : medicines) {
+      if (medicine.getName().equalsIgnoreCase(name)) {
+        return medicine;
+      }
+    }
+    return null;
+  }
+
+  private static User findUserByUsername(String username) {
+    for (User user : users) {
+      if (user.getUsername().equalsIgnoreCase(username)) {
+        return user;
+      }
+    }
+    return null;
   }
 }

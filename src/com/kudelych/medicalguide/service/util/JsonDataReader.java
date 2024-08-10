@@ -1,4 +1,4 @@
-package com.sashka11111.bookkeeping.service;
+package com.kudelych.medicalguide.service.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;

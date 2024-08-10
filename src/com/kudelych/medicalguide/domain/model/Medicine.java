@@ -1,40 +1,42 @@
 package com.kudelych.medicalguide.domain.model;
 
-public class Book {
-
+public class Medicine {
   private int id;
-  private String title;
-  private String author;
+  private String name;
   private String category;
-  private int yearPublished;
+  private String description;
+  private double price;
+  private String manufacturer;
 
-  public Book() {
+  // Конструктор
+  public Medicine(int id, String name, String category, String description, double price, String manufacturer) {
     this.id = id;
-    this.title = title;
-    this.author = author;
+    this.name = name;
     this.category = category;
-    this.yearPublished = yearPublished;
+    this.description = description;
+    this.price = price;
+    this.manufacturer = manufacturer;
   }
-  public int getId(){
+
+  // Конструктор за замовчуванням
+  public Medicine() {
+  }
+
+  // Гетери і сетери
+  public int getId() {
     return id;
   }
-  public void setId(int id){
+
+  public void setId(int id) {
     this.id = id;
   }
-  public String getTitle() {
-    return title;
+
+  public String getName() {
+    return name;
   }
 
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  public String getAuthor() {
-    return author;
-  }
-
-  public void setAuthor(String author) {
-    this.author = author;
+  public void setName(String name) {
+    this.name = name;
   }
 
   public String getCategory() {
@@ -45,22 +47,41 @@ public class Book {
     this.category = category;
   }
 
-  public int getYearPublished() {
-    return yearPublished;
+  public String getDescription() {
+    return description;
   }
 
-  public void setYearPublished(int yearPublished) {
-    this.yearPublished = yearPublished;
+  public void setDescription(String description) {
+    this.description = description;
   }
 
+  public double getPrice() {
+    return price;
+  }
+
+  public void setPrice(double price) {
+    this.price = price;
+  }
+
+  public String getManufacturer() {
+    return manufacturer;
+  }
+
+  public void setManufacturer(String manufacturer) {
+    this.manufacturer = manufacturer;
+  }
+
+  // Перевизначення методу toString
   @Override
   public String toString() {
-    return "Book{" +
+    return "Medicine{" +
         "id=" + id +
-        ", title='" + title + '\'' +
-        ", author='" + author + '\'' +
+        ", name='" + name + '\'' +
         ", category=" + category +
-        ", yearPublished=" + yearPublished +
+        ", description='" + description + '\'' +
+        ", price=" + price +
+        ", manufacturer='" + manufacturer + '\'' +
         '}';
   }
 }
+

@@ -1,15 +1,31 @@
 [ {
   "userId" : 1,
-  "username" : "librarian",
-  "password" : "librarian",
-  "email" : "librarian@gmail.com",
-  "phoneNumber" : "+380968893566",
-  "role" : "Бібліотекар"
+  "username" : "Admin",
+  "password" : "Admin123",
+  "email" : "Admin@gmail.com",
+  "role" : "Admin"
 }, {
   "userId" : 2,
-  "username" : "sashka11111",
-  "password" : "123456",
-  "email" : "sashka11111@gmail.com",
-  "phoneNumber" : "+09799856356",
-  "role" : "Читач"
-} ]
+  "username" : "Vlad",
+  "password" : "Vlad123",
+  "email" : "KudelychVlad@gmail.com",
+  "role" : "User"
+}, {
+  "userId" : 3,
+  "username" : "Anna",
+  "password" : "AnnaPass",
+  "email" : "anna@gmail.com",
+  "role" : "User"
+}, {
+  "userId" : 4,
+  "username" : "John",
+  "password" : "John1234",
+  "email" : "john@gmail.com",
+  "role" : "User"
+}, {
+  "userId" : 5,
+  "username" : "Lisa",
+  "password" : "LisaPass",
+  "email" : "lisa@gmail.com",
+  "role" : "User"
+}]

@@ -1,14 +1,15 @@
-package com.sashka11111.bookkeeping.presentation;
+package com.kudelych.medicalguide.presentation;
 
-import com.sashka11111.bookkeeping.service.AuthorizationService;
-import com.sashka11111.bookkeeping.service.BookService;
-import com.sashka11111.bookkeeping.service.CategoryService;
-import com.sashka11111.bookkeeping.service.DeleteService;
-import com.sashka11111.bookkeeping.service.EditService;
-import com.sashka11111.bookkeeping.service.RegistrationService;
-import com.sashka11111.bookkeeping.service.ReviewService;
-import com.sashka11111.bookkeeping.service.SearchService;
-import com.sashka11111.bookkeeping.domain.validation.UserInputHandler;
+import com.kudelych.medicalguide.domain.validation.UserInputHandler;
+import com.kudelych.medicalguide.service.operations.AuthorizationService;
+import com.kudelych.medicalguide.service.CategoryService;
+import com.kudelych.medicalguide.service.UserService;
+import com.kudelych.medicalguide.service.operations.DeleteService;
+import com.kudelych.medicalguide.service.operations.EditService;
+import com.kudelych.medicalguide.service.MedicineService;
+import com.kudelych.medicalguide.service.operations.RegistrationService;
+import com.kudelych.medicalguide.service.ReviewService;
+import com.kudelych.medicalguide.service.operations.SearchService;
 
 public class Menu {
 
@@ -19,11 +20,19 @@ public class Menu {
     UserInputHandler userInputHandler = new UserInputHandler();
     while (true) {
       if (Application.currentUser == null) {
+        String art = "╭╮╭╮╭┳━━━┳╮╱╱╭━━━┳━━━┳━╮╭━┳━━━╮\n"
+            + "┃┃┃┃┃┃╭━━┫┃╱╱┃╭━╮┃╭━╮┃┃╰╯┃┃╭━━╯\n"
+            + "┃┃┃┃┃┃╰━━┫┃╱╱┃┃╱╰┫┃╱┃┃╭╮╭╮┃╰━━╮\n"
+            + "┃╰╯╰╯┃╭━━┫┃╱╭┫┃╱╭┫┃╱┃┃┃┃┃┃┃╭━━╯\n"
+            + "╰╮╭╮╭┫╰━━┫╰━╯┃╰━╯┃╰━╯┃┃┃┃┃┃╰━━╮\n"
+            + "╱╰╯╰╯╰━━━┻━━━┻━━━┻━━━┻╯╰╯╰┻━━━╯\n";
+
+        System.out.println(art);
         System.out.println("1) Реєстрація");
         System.out.println("2) Авторизація");
         System.out.println("0) Вихід");
 
-        int choice = userInputHandler.promptUserForInteger("Ваш вибір");
+        int choice = userInputHandler.promptUserForInteger("Ваш вибір: ");
 
         switch (choice) {
           case 1:
@@ -49,19 +58,23 @@ public class Menu {
         System.out.println("1) Реєстрація");
         System.out.println("2) Авторизація");
       } else {
-        String art = "      ______ ______\n" +
-            "    _/      Y      \\_\n" +
-            "   // ~~ ~~ | ~~ ~  \\\\\n" +
-            "  // ~ ~ ~~ | ~~~ ~~ \\\\\n" +
-            " //________.|.________\\\\\\\n" +
-            "`----------`-'----------'";
+        String art = "             {_________}\n"
+            + "              )=======(\n"
+            + "             /         \\\n"
+            + "            | _________ |\n"
+            + "            ||   _     ||\n"
+            + "            ||  |_)    ||\n"
+            + "            ||  | \\/   ||\n"
+            + "      __    ||    /\\   ||\n"
+            + " __  (_|)__ |'---------'|\n"
+            + "(_|)    (_|)`-.........-'\n";
 
         System.out.println(art);
         System.out.println("1) Перегляд даних");
-        System.out.println("2) Пошук книг");
-        System.out.println("3) Залишити відгук на книгу");
+        System.out.println("2) Пошук лікарського засобу");
+        System.out.println("3) Залишити відгук на лікарський засіб");
 
-        if ("Бібліотекар".equals(userRole)) {
+        if ("Admin".equals(userRole)) {
           System.out.println("4) Додавання даних");
           System.out.println("5) Редагування даних");
           System.out.println("6) Видалення даних");
@@ -70,7 +83,7 @@ public class Menu {
 
       System.out.println("0) Вихід з головного меню");
 
-      int choice = userInputHandler.promptUserForInteger("Ваш вибір");
+      int choice = userInputHandler.promptUserForInteger("Ваш вибір: ");
 
       switch (choice) {
         case 1:
@@ -84,7 +97,7 @@ public class Menu {
           if ("".equals(userRole)) {
             AuthorizationService.authorization();
           } else {
-            SearchService.searchService(); // Пошук книг
+            SearchService.searchService();
           }
           break;
         case 3:
@@ -93,17 +106,17 @@ public class Menu {
           }
           break;
         case 4:
-          if ("Бібліотекар".equals(userRole)) {
+          if ("Admin".equals(userRole)) {
             showAddMenu();
           }
           break;
         case 5:
-          if ("Бібліотекар".equals(userRole)) {
+          if ("Admin".equals(userRole)) {
             showEditMenu();
           }
           break;
         case 6:
-          if ("Бібліотекар".equals(userRole)) {
+          if ("Admin".equals(userRole)) {
             showDeleteMenu();
           }
           break;
@@ -118,17 +131,17 @@ public class Menu {
   }
 
   private static void showViewMenu() throws IllegalAccessException {
-    System.out.println("1) Переглянути книги");
+    System.out.println("1) Переглянути лікарські засоби");
     System.out.println("2) Переглянути категорії");
     System.out.println("3) Переглянути відгуки");
     System.out.println("4) Переглянути мої дані");
     System.out.println("5) Назад");
 
-    int choice = new UserInputHandler().promptUserForInteger("Ваш вибір");
+    int choice = new UserInputHandler().promptUserForInteger("Ваш вибір: ");
 
     switch (choice) {
       case 1:
-        BookService.main(new String[]{});
+        MedicineService.main(new String[]{});
         break;
       case 2:
         CategoryService.main(new String[]{});
@@ -137,7 +150,7 @@ public class Menu {
         ReviewService.main(new String[]{});
         break;
       case 4:
-        UserConsoleUI.displayUserInfo(Application.currentUser);
+        UserService.displayUserInfo(Application.currentUser);
         break;
       case 5:
         return;
@@ -148,15 +161,15 @@ public class Menu {
   }
 
   private static void showAddMenu() throws IllegalAccessException {
-    System.out.println("1) Додати книгу");
+    System.out.println("1) Додати лікарський засіб");
     System.out.println("2) Додати категорію");
     System.out.println("3) Назад");
 
-    int choice = new UserInputHandler().promptUserForInteger("Ваш вибір");
+    int choice = new UserInputHandler().promptUserForInteger("Ваш вибір: ");
 
     switch (choice) {
       case 1:
-        BookService.addBook();
+        MedicineService.addMedicine();
         break;
       case 2:
         CategoryService.addCategory();
@@ -170,15 +183,15 @@ public class Menu {
   }
 
   private static void showEditMenu() throws IllegalAccessException {
-    System.out.println("1) Редагувати книгу");
+    System.out.println("1) Редагувати лікарський засіб");
     System.out.println("2) Редагувати категорію");
     System.out.println("3) Назад");
 
-    int choice = new UserInputHandler().promptUserForInteger("Ваш вибір");
+    int choice = new UserInputHandler().promptUserForInteger("Ваш вибір: ");
 
     switch (choice) {
       case 1:
-        EditService.editBook();
+        EditService.editMedicine();
         break;
       case 2:
         EditService.editCategory();
@@ -191,17 +204,17 @@ public class Menu {
     }
   }
   private static void showDeleteMenu() throws IllegalAccessException {
-    System.out.println("1) Видалити книгу");
+    System.out.println("1) Видалити лікарський засіб");
     System.out.println("2) Видалити категорію");
     System.out.println("3) Видалити відгук");
     System.out.println("4) Видалити користувача");
     System.out.println("5) Назад");
 
-    int choice = new UserInputHandler().promptUserForInteger("Ваш вибір");
+    int choice = new UserInputHandler().promptUserForInteger("Ваш вибір: ");
 
     switch (choice) {
       case 1:
-        DeleteService.deleteBook();
+        DeleteService.deleteMedicine();
         break;
       case 2:
         DeleteService.deleteCategory();

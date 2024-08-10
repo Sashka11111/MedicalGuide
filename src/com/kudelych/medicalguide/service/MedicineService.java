@@ -2,82 +2,143 @@ package com.kudelych.medicalguide.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.sashka11111.bookkeeping.domain.model.Book;
+import com.kudelych.medicalguide.domain.model.Medicine;
+import com.kudelych.medicalguide.domain.validation.ValidationInput;
+import com.kudelych.medicalguide.service.util.JsonDataReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
-public class BookService {
+public class MedicineService {
 
-  private static final String BOOK_FILE_PATH = "Data/medicines.json";
-  private static List<Book> books;
+  private static final String MEDICINE_FILE_PATH = "Data/medicines.json";
+  private static List<Medicine> medicines;
 
-  // Метод для відображення всіх книг
+  // Метод для відображення всіх лікарських засобів
   public static void main(String[] args) {
-    books = JsonDataReader.modelDataJsonReader(BOOK_FILE_PATH, Book[].class);
-    displayBooks(books);
+    medicines = JsonDataReader.modelDataJsonReader(MEDICINE_FILE_PATH, Medicine[].class);
+    displayMedicines(medicines);
   }
 
-  public static void displayBooks(List<Book> bookList) {
-    if (bookList.isEmpty()) {
-      System.out.println("Список книг порожній.");
+  public static void displayMedicines(List<Medicine> medicineList) {
+    if (medicineList.isEmpty()) {
+      System.out.println("Список лікарських засобів порожній.");
     } else {
-      System.out.println("Список книг:");
-      for (Book book : bookList) {
-        System.out.println("ID книги: " + book.getId());
-        System.out.println("Назва: " + book.getTitle());
-        System.out.println("Автор: " + book.getAuthor());
-        System.out.println("Рік видання: " + book.getYearPublished());
-        System.out.println("Категорія: " + book.getCategory());
+      System.out.println("Список лікарських засобів:");
+      for (Medicine medicine : medicineList) {
+        // Виведення інформації про лікарський засіб
+        System.out.println("Назва: " + medicine.getName());
+        System.out.println("Ціна: " + medicine.getPrice());
+        System.out.println("Категорія : " + medicine.getCategory());
+        System.out.println("Опис: " + medicine.getDescription());
         System.out.println(); // Для розділення між записами
       }
     }
   }
 
-  public static void addBook() {
+  public static void addMedicine() {
     Scanner scanner = new Scanner(System.in);
-    books = JsonDataReader.modelDataJsonReader(BOOK_FILE_PATH, Book[].class);
+    medicines = JsonDataReader.modelDataJsonReader(MEDICINE_FILE_PATH, Medicine[].class);
 
-    // Знайти максимальний ID книги
-    int maxBookId = books.stream()
-        .mapToInt(Book::getId)
+    // Знайти максимальний ID лікарського засобу
+    int maxMedicineId = medicines.stream()
+        .mapToInt(Medicine::getId)
         .max()
         .orElse(0);
 
-    // Новий ID книги буде на одиницю більше за максимальний
-    int newBookId = maxBookId + 1;
+    // Новий ID лікарського засобу буде на одиницю більше за максимальний
+    int newMedicineId = maxMedicineId + 1;
 
-    System.out.println("Додавання нової книги:");
+    System.out.println("Додавання нового лікарського засобу:");
 
-    System.out.println("Введіть назву книги:");
-    String title = scanner.nextLine();
+    String name;
+    do {
+      System.out.println("Введіть назву лікарського засобу:");
+      name = scanner.nextLine();
+      if (ValidationInput.isEmpty(name)) {
+        System.out.println("Назва не може бути порожньою.");
+        continue;
+      }
+      if (!ValidationInput.isValidName(name)) {
+        System.out.println("Назва повинна мiстити буквенний символ.");
+      }
+    } while (!ValidationInput.isValidName(name));
 
-    System.out.println("Введіть автора книги:");
-    String author = scanner.nextLine();
+    double price;
+    do {
+      System.out.println("Введіть ціну (можна вводити як цілі, так і дробові числа):");
+      String input = scanner.nextLine();
 
-    System.out.println("Введіть рік видання:");
-    int yearPublished = scanner.nextInt();
-    scanner.nextLine(); // Споживаємо залишок рядка
+      try {
+        // Спробуємо перетворити введення на число
+        price = Double.parseDouble(input);
+        if (!ValidationInput.isValidPrice(price)) {
+          System.out.println("Ціна не відповідає вимогам. Спробуйте знову.");
+          continue;
+        }
+        break; // вихід з циклу, якщо всі перевірки пройдено
 
-    System.out.println("Введіть категорію книги:");
-    String category = scanner.nextLine();
+      } catch (NumberFormatException e) {
+        System.out.println("Невірний формат ціни. Будь ласка, введіть число.");
+      }
+    } while (true);
 
-    Book newBook = new Book();
-    newBook.setId(newBookId); // Встановлюємо новий ID книги
-    newBook.setTitle(title);
-    newBook.setAuthor(author);
-    newBook.setYearPublished(yearPublished);
-    newBook.setCategory(category);
-    books.add(newBook);
+    String category;
+    do {
+      System.out.println("Введіть категорію:");
+      category = scanner.nextLine();
+      if (ValidationInput.isEmpty(category)) {
+        System.out.println("Категорія не може бути порожньою.");
+        continue;
+      }
+      if (!ValidationInput.isValidName(category)) {
+        System.out.println("Категорія повинна мiстити буквенний символ.");
+      }
+    } while (ValidationInput.isEmpty(category));
+
+    String description;
+    do {
+      System.out.println("Введіть опис лікарського засобу:");
+      description = scanner.nextLine();
+      if (ValidationInput.isEmpty(description)) {
+        System.out.println("Опис не може бути порожнім.");
+        continue;
+      }
+      if (!ValidationInput.isValidName(description)) {
+        System.out.println("Опис повинен мiстити буквенний символ.");
+      }
+    } while (ValidationInput.isEmpty(description));
+
+    String manufacturer;
+    do {
+      System.out.println("Введіть виробника лікарського засобу:");
+      manufacturer = scanner.nextLine();
+      if (ValidationInput.isEmpty(manufacturer)) {
+        System.out.println("Назва виробника не може бути порожнім.");
+        continue;
+      }
+      if (!ValidationInput.isValidName(manufacturer)) {
+        System.out.println("Назва виробника повинна мiстити буквенний символ.");
+      }
+    } while (ValidationInput.isEmpty(manufacturer));
+
+    Medicine newMedicine = new Medicine();
+    newMedicine.setId(newMedicineId);
+    newMedicine.setName(name);
+    newMedicine.setPrice(price);
+    newMedicine.setCategory(category);
+    newMedicine.setDescription(description);
+    newMedicine.setManufacturer(manufacturer);
+    medicines.add(newMedicine);
 
     try {
       ObjectMapper objectMapper = new ObjectMapper();
       objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-      objectMapper.writeValue(new File(BOOK_FILE_PATH), books);
-      System.out.println("Нову книгу додано успішно.");
+      objectMapper.writeValue(new File(MEDICINE_FILE_PATH), medicines);
+      System.out.println("Новий лікарський засіб додано успішно.");
     } catch (IOException e) {
-      System.out.println("Помилка при додаванні нової книги: " + e.getMessage());
+      System.out.println("Помилка при додаванні нового лікарського засобу: " + e.getMessage());
     }
   }
 }

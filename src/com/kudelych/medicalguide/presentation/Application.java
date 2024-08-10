@@ -1,19 +1,19 @@
-package com.sashka11111.bookkeeping.presentation;
+package com.kudelych.medicalguide.presentation;
 
-import com.sashka11111.bookkeeping.domain.model.User;
+import com.kudelych.medicalguide.domain.model.User;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Application {
-  public static List<User> librariansList = new ArrayList<>();
-  public static List<User> readersList = new ArrayList<>();
+  public static List<User> adminsList = new ArrayList<>();
+  public static List<User> usersList = new ArrayList<>();
   public static User currentUser;
 
   static {
-    // Додати бібліотекаря
-    librariansList.add(new User("librarian", "librarian123", "librarian@example.com", "+380968893566","Бібліотекар"));
-    // Додати читача
-    readersList.add(new User("sashka11111", "123456", "sashka11111@gmail.com", "+380968893599","Читач"));
+    // Додавання адміна
+    adminsList.add(new User(1, "Admin", "Admin123","Admin@gmail.com", "Admin"));
+    // Додавання користувача
+    usersList.add(new User(2, "Vlad","Vlad123", "KudelychVlad@gmail.com",  "User"));
   }
 
   public static void runner() throws IllegalAccessException {
@@ -21,17 +21,6 @@ public class Application {
   }
 
   public static void main(String[] args) throws IllegalAccessException {
-    String art = "   ▄▀▀▀▄▄▄▄▄▄▄▀▀▀▄  \n"
-        + "   █▒▒░░░░░░░░░▒▒█  \n"
-        + "    █░░█░░░░░█░░█    \n"
-        + " ▄▄  █░░░▀█▀░░░█  ▄▄ \n"
-        + "█░░█ ▀▄░░░░░░░▄▀ █░░█\n"
-        + "█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█\n"
-        + "█░░╦─╦╔╗╦─╔╗╔╗╔╦╗╔╗░░█\n"
-        + "█░░║║║╠─║─║─║║║║║╠─░░█\n"
-        + "█░░╚╩╝╚╝╚╝╚╝╚╝╩─╩╚╝░░█\n"
-        + "█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█";
-    System.out.println(art);
     runner();
   }
 }

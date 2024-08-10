@@ -1,10 +1,11 @@
-package com.sashka11111.bookkeeping.service;
+package com.kudelych.medicalguide.service.operations;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sashka11111.bookkeeping.presentation.Application;
-import com.sashka11111.bookkeeping.domain.model.User;
-import com.sashka11111.bookkeeping.presentation.Menu;
-import com.sashka11111.bookkeeping.domain.validation.UserInputHandler;
+import com.kudelych.medicalguide.domain.model.User;
+import com.kudelych.medicalguide.domain.validation.UserInputHandler;
+import com.kudelych.medicalguide.presentation.Application;
+import com.kudelych.medicalguide.presentation.Menu;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,23 +16,25 @@ import java.util.Scanner;
 public class AuthorizationService {
 
   public static void authorization() {
-    // Додати меню для вибору ролі
-    System.out.println("Оберіть роль:");
-    System.out.println("1) Бібліотекар");
-    System.out.println("2) Читач");
-    int roleChoice = new UserInputHandler().promptUserForInteger("Ваш вибір");
+    UserInputHandler inputHandler = new UserInputHandler();
 
     String role;
-    switch (roleChoice) {
-      case 1:
-        role = "Бібліотекар";
+    while (true) {
+      System.out.println("Оберіть роль:");
+      System.out.println("1) Admin");
+      System.out.println("2) User");
+
+      int roleChoice = inputHandler.promptUserForInteger("Ваш вибір: ");
+
+      if (roleChoice == 1) {
+        role = "Admin";
         break;
-      case 2:
-        role = "Читач";
+      } else if (roleChoice == 2) {
+        role = "User";
         break;
-      default:
-        System.out.println("Невірний вибір ролі.");
-        return;
+      } else {
+        System.out.println("Невірний вибір ролі. Спробуйте ще раз.");
+      }
     }
 
     Scanner scanner = new Scanner(System.in);
@@ -40,7 +43,6 @@ public class AuthorizationService {
 
     System.out.println("Введіть пароль:");
     String password = scanner.nextLine();
-    System.out.println("Ви ввели логін: " + username + " і пароль: " + password);
 
     List<User> users = readUsersFromJson("Data/users.json");
 
@@ -54,7 +56,8 @@ public class AuthorizationService {
       } catch (IllegalAccessException e) {
         throw new RuntimeException(e);
       }
-    }   if (user == null) {
+    }
+    if (user == null) {
       System.out.println("Це не Ваша роль, авторизуйтесь знову.");
     } else {
       System.out.println("Помилка авторизації. Перевірте логін та пароль.");

@@ -1,12 +1,13 @@
-package com.sashka11111.bookkeeping.service;
+package com.kudelych.medicalguide.service.operations;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.sashka11111.bookkeeping.domain.model.Book;
-import com.sashka11111.bookkeeping.domain.model.Category;
-import com.sashka11111.bookkeeping.domain.model.Review;
-import com.sashka11111.bookkeeping.domain.model.User;
-import com.sashka11111.bookkeeping.domain.validation.ValidationInput;
+import com.kudelych.medicalguide.domain.model.Category;
+import com.kudelych.medicalguide.domain.model.Medicine;
+import com.kudelych.medicalguide.domain.model.Review;
+import com.kudelych.medicalguide.domain.model.User;
+import com.kudelych.medicalguide.domain.validation.ValidationInput;
+import com.kudelych.medicalguide.service.util.JsonDataReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -14,34 +15,34 @@ import java.util.Scanner;
 
 public class DeleteService {
 
-  private static final String BOOK_FILE_PATH = "Data/books.json";
+  private static final String MEDICINE_FILE_PATH = "Data/medicines.json";
   private static final String CATEGORY_FILE_PATH = "Data/categories.json";
   private static final String REVIEWS_FILE_PATH = "Data/reviews.json";
   private static final String USER_FILE_PATH = "Data/users.json";
 
-  public static void deleteBook() {
+  public static void deleteMedicine() {
     Scanner scanner = new Scanner(System.in);
-    List<Book> books = JsonDataReader.modelDataJsonReader(BOOK_FILE_PATH, Book[].class);
+    List<Medicine> medicines = JsonDataReader.modelDataJsonReader(MEDICINE_FILE_PATH, Medicine[].class);
 
-    System.out.println("Список доступних книг:");
-    for (Book book : books) {
-      System.out.println("ID книги: " + book.getId() + ", Назва: " + book.getTitle());
+    System.out.println("Список доступних лікарських засобів:");
+    for (Medicine medicine : medicines) {
+      System.out.println("ID лікарського засобу: " + medicine.getId() + ", Назва: " + medicine.getName());
     }
 
-    System.out.println("Введіть ID книги, яку хочете видалити:");
-    int idBook = ValidationInput.getValidIntInput(scanner);
+    System.out.println("Введіть ID лікарського засобу для видалення:");
+    int medicineId = ValidationInput.getValidIntInput(scanner);
 
-    Book selectedBook = books.stream()
-        .filter(book -> book.getId() == idBook)
+    Medicine selectedMedicine = medicines.stream()
+        .filter(medicine -> medicine.getId() == medicineId)
         .findFirst()
         .orElse(null);
 
-    if (selectedBook != null) {
-      books.remove(selectedBook);
-      saveToFile(BOOK_FILE_PATH, books);
-      System.out.println("Книгу успішно видалено.");
+    if (selectedMedicine != null) {
+      medicines.remove(selectedMedicine);
+      saveToFile(MEDICINE_FILE_PATH, medicines);
+      System.out.println("Лікарський засіб успішно видалено.");
     } else {
-      System.out.println("Книгу з введеним ID не знайдено.");
+      System.out.println("Лікарський засіб з введеним ID не знайдено.");
     }
   }
 

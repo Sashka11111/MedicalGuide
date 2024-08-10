@@ -1,10 +1,7 @@
-package com.sashka11111.bookkeeping.domain.validation;
+package com.kudelych.medicalguide.domain.validation;
 
 import java.util.Scanner;
 
-/**
- * Клас для обробки вводу користувача з консолі.
- */
 public class UserInputHandler {
 
   private final Scanner scanner;
@@ -14,21 +11,29 @@ public class UserInputHandler {
   }
 
   /**
-   * Запитує у користувача введення цілого числа.
+   * Запитує у користувача ціле число з консолі.
    *
-   * @param prompt Повідомлення, яке буде показано користувачу.
-   * @return Ціле числове значення, введене користувачем.
+   * @param prompt Повідомлення для користувача.
+   * @return Введене число.
    */
   public int promptUserForInteger(String prompt) {
-    System.out.print(prompt + ": ");
-
+    System.out.print(prompt);
     while (!scanner.hasNextInt()) {
-      System.out.println("Будь ласка, введіть ціле число.");
-      System.out.print(prompt + ": ");
-      scanner.next();
+      System.out.println("Будь ласка, введіть дійсне ціле число.");
+      scanner.next(); // очищення неправильного вводу
+      System.out.print(prompt);
     }
-    int result = scanner.nextInt();
-    scanner.nextLine(); // Очищуємо буфер сканера
-    return result;
+    return scanner.nextInt();
+  }
+
+  /**
+   * Запитує у користувача рядок з консолі.
+   *
+   * @param prompt Повідомлення для користувача.
+   * @return Введений рядок.
+   */
+  public String promptUserForString(String prompt) {
+    System.out.print(prompt);
+    return scanner.nextLine();
   }
 }

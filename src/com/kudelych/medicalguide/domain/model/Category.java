@@ -1,17 +1,17 @@
-package com.sashka11111.bookkeeping.domain.model;
+package com.kudelych.medicalguide.domain.model;
 
 public class Category {
 
   private int categoryId;
   private String name;
 
+  // Конструктор за замовчуванням
+  public Category() {
+  }
+
   public Category(int categoryId, String name) {
     this.categoryId = categoryId;
     this.name = name;
-  }
-
-  public Category() {
-
   }
 
   public int getCategoryId() {

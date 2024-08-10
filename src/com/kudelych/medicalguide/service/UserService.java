@@ -1,16 +1,20 @@
-package com.sashka11111.bookkeeping.presentation;
+package com.kudelych.medicalguide.service;
 
-
-import com.sashka11111.bookkeeping.domain.model.User;
+import com.kudelych.medicalguide.domain.model.User;
 import java.lang.reflect.Field;
 
-public class UserConsoleUI {
+public class UserService {
 
   // Метод для виведення інформації про користувача в консоль
   public static void displayUserInfo(User user) throws IllegalAccessException {
-
     for (Field field : User.class.getDeclaredFields()) {
       String fieldName = field.getName();
+
+      // Пропускаємо поле ID
+      if ("userId".equals(fieldName)) {
+        continue;
+      }
+
       field.setAccessible(true);
       Object value = field.get(user);
       printFieldName(fieldName);
@@ -27,7 +31,23 @@ public class UserConsoleUI {
 
   // Метод для виведення назви поля
   private static void printFieldName(String fieldName) {
-    System.out.println(fieldName + ":");
+    switch (fieldName) {
+      case "username":
+        System.out.print("Логін:");
+        break;
+      case "password":
+        System.out.print("Пароль:");
+        break;
+      case "email":
+        System.out.print("Електронна пошта:");
+        break;
+      case "role":
+        System.out.print("Роль:");
+        break;
+      default:
+        System.out.print(fieldName + ":");
+        break;
+    }
   }
 
   // Метод для виведення значення поля

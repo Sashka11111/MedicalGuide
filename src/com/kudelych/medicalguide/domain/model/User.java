@@ -1,4 +1,4 @@
-package com.sashka11111.bookkeeping.domain.model;
+package com.kudelych.medicalguide.domain.model;
 
 public class User {
 
@@ -6,27 +6,17 @@ public class User {
   private String username; // Ім'я користувача
   private String password; // Пароль користувача
   private String email; // Електронна пошта користувача
-  private String phoneNumber; // Номер телефону користувача
-  private String role; // Роль користувача (наприклад, "Бібліотекар" або "Читач")
+  private String role; // Роль користувача ( "Admin" або "User")
 
   // Конструктор за замовчуванням
   public User() {
   }
 
-  public User(int userId, String username, String password, String email, String phoneNumber, String role) {
+  public User(int userId, String username, String password, String email, String role) {
     this.userId = userId;
     this.username = username;
     this.password = password;
     this.email = email;
-    this.phoneNumber = phoneNumber;
-    this.role = role;
-  }
-
-  public User(String username, String password, String email, String phoneNumber, String role) {
-    this.username = username;
-    this.password = password;
-    this.email = email;
-    this.phoneNumber = phoneNumber;
     this.role = role;
   }
 
@@ -63,14 +53,6 @@ public class User {
     this.email = email;
   }
 
-  public String getPhoneNumber() {
-    return phoneNumber;
-  }
-
-  public void setPhoneNumber(String phoneNumber) {
-    this.phoneNumber = phoneNumber;
-  }
-
   public String getRole() {
     return role;
   }
@@ -84,8 +66,7 @@ public class User {
     return "User{" +
         "userId=" + userId +
         ", username='" + username + '\'' +
-        ", phoneNumber='" + phoneNumber + '\'' +
-        ", password='" + password + '\'' +
+        ", password='" + password +
         ", role='" + role + '\'' +
         '}';
   }
