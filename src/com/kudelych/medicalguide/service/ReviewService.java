@@ -18,15 +18,12 @@ public class ReviewService {
 
   private static final String REVIEWS_FILE_PATH = "Data/reviews.json";
   private static final String MEDICINES_FILE_PATH = "Data/medicines.json";
-  private static final String USERS_FILE_PATH = "Data/users.json";
   private static List<Review> reviews;
   private static List<Medicine> medicines;
-  private static List<User> users;
 
   public static void main(String[] args) {
     reviews = JsonDataReader.modelDataJsonReader(REVIEWS_FILE_PATH, Review[].class);
     medicines = JsonDataReader.modelDataJsonReader(MEDICINES_FILE_PATH, Medicine[].class);
-    users = JsonDataReader.modelDataJsonReader(USERS_FILE_PATH, User[].class);
     displayReviews(reviews);
   }
 
@@ -49,7 +46,6 @@ public class ReviewService {
     Scanner scanner = new Scanner(System.in);
     reviews = JsonDataReader.modelDataJsonReader(REVIEWS_FILE_PATH, Review[].class);
     medicines = JsonDataReader.modelDataJsonReader(MEDICINES_FILE_PATH, Medicine[].class);
-    users = JsonDataReader.modelDataJsonReader(USERS_FILE_PATH, User[].class);
 
     System.out.println("Додавання нового відгуку:");
 
@@ -85,8 +81,19 @@ public class ReviewService {
       }
     }
 
-    System.out.print("Введіть коментар: ");
-    String comment = scanner.nextLine();
+    String comment;
+    while (true) {
+      System.out.print("Введіть коментар: ");
+      comment = scanner.nextLine();
+
+      if (ValidationInput.isEmpty(comment)) {
+        System.out.println("Коментар не може бути порожнім.");
+      } else if (!ValidationInput.isValidName(comment)) {
+        System.out.println("Коментар повинен мiстити беквенні символи.");
+      } else {
+        break; // Вихід з циклу, якщо коментар валідний
+      }
+    }
 
     Review newReview = new Review();
     newReview.setId(generateUniqueId());
@@ -122,15 +129,6 @@ public class ReviewService {
     for (Medicine medicine : medicines) {
       if (medicine.getName().equalsIgnoreCase(name)) {
         return medicine;
-      }
-    }
-    return null;
-  }
-
-  private static User findUserByUsername(String username) {
-    for (User user : users) {
-      if (user.getUsername().equalsIgnoreCase(username)) {
-        return user;
       }
     }
     return null;

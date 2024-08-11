@@ -160,7 +160,7 @@ public class Menu {
     }
   }
 
-  private static void showAddMenu() throws IllegalAccessException {
+  private static void showAddMenu() {
     System.out.println("1) Додати лікарський засіб");
     System.out.println("2) Додати категорію");
     System.out.println("3) Назад");
@@ -182,7 +182,7 @@ public class Menu {
     }
   }
 
-  private static void showEditMenu() throws IllegalAccessException {
+  private static void showEditMenu() {
     System.out.println("1) Редагувати лікарський засіб");
     System.out.println("2) Редагувати категорію");
     System.out.println("3) Назад");
@@ -203,7 +203,7 @@ public class Menu {
         break;
     }
   }
-  private static void showDeleteMenu() throws IllegalAccessException {
+  private static void showDeleteMenu() {
     System.out.println("1) Видалити лікарський засіб");
     System.out.println("2) Видалити категорію");
     System.out.println("3) Видалити відгук");

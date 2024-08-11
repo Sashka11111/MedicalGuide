@@ -28,4 +28,10 @@
   "password" : "LisaPass",
   "email" : "lisa@gmail.com",
   "role" : "User"
-}]
+}, {
+  "userId" : 6,
+  "username" : "Vladislav",
+  "password" : "785632",
+  "email" : "Vladislav@gmail.com",
+  "role" : "User"
+} ]

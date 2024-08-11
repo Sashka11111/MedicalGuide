@@ -30,11 +30,6 @@ public class ValidationInput {
     return input;
   }
 
-  // Метод для перевірки правильності введення ID (позитивне число)
-  public static boolean isValidId(int id) {
-    return id > 0;
-  }
-
   // Метод для перевірки правильності введення ціни (позитивне число)
   public static boolean isValidPrice(double price) {
     return price > 0;

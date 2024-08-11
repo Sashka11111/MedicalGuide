@@ -25,15 +25,4 @@ public class UserInputHandler {
     }
     return scanner.nextInt();
   }
-
-  /**
-   * Запитує у користувача рядок з консолі.
-   *
-   * @param prompt Повідомлення для користувача.
-   * @return Введений рядок.
-   */
-  public String promptUserForString(String prompt) {
-    System.out.print(prompt);
-    return scanner.nextLine();
-  }
 }

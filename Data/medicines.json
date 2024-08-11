@@ -68,25 +68,4 @@
   "description" : "Антигістамінний препарат тривалої дії, використовується для зняття симптомів алергії.",
   "price" : 40.0,
   "manufacturer" : "Дарниця"
-}, {
-  "id" : 11,
-  "name" : "lllew333",
-  "category" : "dss",
-  "description" : "ffffffff",
-  "price" : 332.0,
-  "manufacturer" : null
-}, {
-  "id" : 12,
-  "name" : "віі",
-  "category" : "ррвврр",
-  "description" : "рррв",
-  "price" : 7.0,
-  "manufacturer" : "рвр"
-}, {
-  "id" : 13,
-  "name" : "ввв",
-  "category" : "3",
-  "description" : "3",
-  "price" : 33.33,
-  "manufacturer" : "3"
 } ]

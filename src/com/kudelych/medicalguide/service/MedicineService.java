@@ -32,6 +32,7 @@ public class MedicineService {
         System.out.println("Ціна: " + medicine.getPrice());
         System.out.println("Категорія : " + medicine.getCategory());
         System.out.println("Опис: " + medicine.getDescription());
+        System.out.println("Виробник: " + medicine.getManufacturer());
         System.out.println(); // Для розділення між записами
       }
     }
@@ -90,38 +91,40 @@ public class MedicineService {
       category = scanner.nextLine();
       if (ValidationInput.isEmpty(category)) {
         System.out.println("Категорія не може бути порожньою.");
-        continue;
-      }
-      if (!ValidationInput.isValidName(category)) {
+      } else if(!ValidationInput.isValidName(category)) {
         System.out.println("Категорія повинна мiстити буквенний символ.");
+      } else {
+        break;
       }
-    } while (ValidationInput.isEmpty(category));
+    } while (true);
 
     String description;
     do {
       System.out.println("Введіть опис лікарського засобу:");
       description = scanner.nextLine();
+
       if (ValidationInput.isEmpty(description)) {
         System.out.println("Опис не може бути порожнім.");
-        continue;
-      }
-      if (!ValidationInput.isValidName(description)) {
+      } else if (!ValidationInput.isValidName(description)) {
         System.out.println("Опис повинен мiстити буквенний символ.");
+      } else {
+        break; // Вихід з циклу, якщо виробник валідний
       }
-    } while (ValidationInput.isEmpty(description));
+    } while (true); // Повторювати, поки введене значення не буде валідним
 
     String manufacturer;
     do {
       System.out.println("Введіть виробника лікарського засобу:");
       manufacturer = scanner.nextLine();
+
       if (ValidationInput.isEmpty(manufacturer)) {
-        System.out.println("Назва виробника не може бути порожнім.");
-        continue;
+        System.out.println("Назва виробника не може бути порожньою.");
+      } else if (!ValidationInput.isValidName(manufacturer)) {
+        System.out.println("Назва виробника повинна містити буквенний символ.");
+      } else {
+        break; // Вихід з циклу, якщо виробник валідний
       }
-      if (!ValidationInput.isValidName(manufacturer)) {
-        System.out.println("Назва виробника повинна мiстити буквенний символ.");
-      }
-    } while (ValidationInput.isEmpty(manufacturer));
+    } while (true); // Повторювати, поки введене значення не буде валідним
 
     Medicine newMedicine = new Medicine();
     newMedicine.setId(newMedicineId);

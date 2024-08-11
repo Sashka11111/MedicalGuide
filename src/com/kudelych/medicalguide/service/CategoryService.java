@@ -53,19 +53,22 @@ public class CategoryService {
     System.out.println("Додавання нової категорії");
 
     String name;
-    while (true) {
+    do {
       System.out.print("Введіть назву категорії: ");
       name = scanner.nextLine();
 
-      // Валідація назви категорії
-      if (!ValidationInput.isValidName(name)) {
+      if (ValidationInput.isEmpty(name)) {
+        System.out.println("Категорія не може бути порожньою.");
+      } else if (!ValidationInput.isValidName(name)) {
         System.out.println("Категорія повинна містити буквенний символ.");
       } else if (!ValidationInput.isCategoryNameUnique(categories, name)) {
         System.out.println("Категорія з такою назвою вже існує.");
       } else {
         break;  // Якщо всі умови виконані, виходимо з циклу
       }
-    }
+    } while (true);
+
+
 
     // Створюємо новий об'єкт категорії
     Category newCategory = new Category();
